@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.itmo.entity.View;
 import ru.itmo.entity.WeatherHistory;
 import ru.itmo.services.WeatherHistoryService;
+import ru.itmo.services.YandexWeather;
 
 import java.util.Date;
 import java.util.Map;
@@ -31,8 +32,8 @@ public class WeatherController {
         try {
             Date today = java.util.Calendar.getInstance().getTime();
             Optional<WeatherHistory> weather = weatherHistoryService.getById(today);
-            if(weather.isEmpty()) throw new Exception("Not Found");
-            map.put("object", weather.get());
+            if(weather.isEmpty()) map.put("object", YandexWeather.getWeather());
+            else map.put("object", weather.get());
             return map;
         } catch (Exception e) {
             map.put("status", "error");
