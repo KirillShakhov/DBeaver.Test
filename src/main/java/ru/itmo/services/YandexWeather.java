@@ -6,9 +6,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class YandexWeather {
-    public String getWeather(){
+    public static String getWeather(){
         try {
-            URL url = new URL("http://yandex.ru/yandsearch?text=*********");
+            URL url = new URL("https://yandex.ru/");
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(url.openConnection().getInputStream(), StandardCharsets.UTF_8));
             while (true) {

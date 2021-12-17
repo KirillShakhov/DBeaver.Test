@@ -33,6 +33,11 @@ public class WeatherHistory {
     @JsonView(View.WeatherHistory.class)
     private String weather_value;
 
+    public WeatherHistory(String t) {
+        weather_date = java.util.Calendar.getInstance().getTime();
+        weather_value = t;
+    }
+
     @Override
     public String toString() {
         return "WeatherHistory{" +

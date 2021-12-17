@@ -10,7 +10,9 @@ import ru.itmo.entity.View;
 import ru.itmo.entity.WeatherHistory;
 import ru.itmo.services.WeatherHistoryService;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class WeatherController {
@@ -23,16 +25,29 @@ public class WeatherController {
 
     @JsonView(View.WeatherHistory.class)
     @GetMapping("/weather")
-    public Map<String, Object> registration(@RequestParam("login") String login,
-                                            @RequestParam("pass") String pass) {
+    public Map<String, Object> getWeather() {
         Map<String, Object> map = new ManagedMap<>();
         map.put("status", "ok");
         try {
-            WeatherHistory weatherHistory = new WeatherHistory();
+            Date today = java.util.Calendar.getInstance().getTime();
+            Optional<WeatherHistory> weather = weatherHistoryService.getById(today);
+            if(weather.isEmpty()) throw new Exception("Not Found");
+            map.put("object", weather.get());
+            return map;
+        } catch (Exception e) {
+            map.put("status", "error");
+            map.put("message", e.getMessage());
+            return map;
+        }
+    }
 
-
+    @GetMapping("/weather/create")
+    public Map<String, Object> createWeather(@RequestParam("t") String t) {
+        Map<String, Object> map = new ManagedMap<>();
+        map.put("status", "ok");
+        try {
+            WeatherHistory weatherHistory = new WeatherHistory(t);
             weatherHistoryService.save(weatherHistory);
-
             return map;
         } catch (Exception e) {
             map.put("status", "error");
